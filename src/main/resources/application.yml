@@ -1,8 +1,44 @@
 server:
-  port : 8098
+  port: 8000
+  servlet:
+    context-path: /blog
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+# static 이하는 정적파일(브라우저가 인식할수 있는것만 넣어야함) 
+# 그냥 static에 test.jsp이런식으로 파일 넣어놓고 컨트롤러 클래스 가서
+# 매핑 시켜도 주소 치면 못참음 왜?
+# jsp는 동적인 파일이기 떄문(자바파일이고 컴파일이 일어나야함) 그래서 브라우저가 인식을 못함
+# 그래서 경로를 좀 바꿔야함 아래쪽 main에 webapp/WEB-INF/views
+# 저 위에 prefix라는건 컨트롤러가 리턴할때 앞에 붙여주는 경로명
+# suffix는 뒤에 붙여주는 경로명
+
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul
     username: hydev
     password: 1234
+    
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false

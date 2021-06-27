@@ -27,6 +27,10 @@
 		  <artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		-->
+		
+		<!-- 
+			스프링부트에선 jsp 지원을 하지 않아서 jsp템플릿 엔진을 의존성 설정 햏야함
+		 -->
 		<!-- JSP 템플릿 엔진 -->
 		<dependency>
 		  <groupId>org.apache.tomcat.embed</groupId>

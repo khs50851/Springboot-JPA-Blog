@@ -4,12 +4,15 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity // User 클래스가 스프링부트가 실행될때 이 클래스를 읽어서 밑에 필드들을 읽어서 자동으로 MySql에 테이블이 생성됨
+// @DynamicInsert insert시에 null인 필드를 제외시켜줌
 public class User {
 	
 	@Id // pk 라는걸 알려줌
@@ -38,8 +42,9 @@ public class User {
 	@Column(nullable = false, length = 50) // null 불가 길이 50
 	private String email; // 이메일
 	
-	@ColumnDefault("'user'") // 쌍따옴표 안에 홑따옴표 같이 넣어서 이게 문자라는걸 알려줘야함
-	private String role; // Enum을 쓰는게 좋긴 함. 도메인을 만들때 좋음 이사람의 role은 admin, 일반유저, 매니저 뭐 이런 식으로 열거 
+	// @ColumnDefault("'user'") // 쌍따옴표 안에 홑따옴표 같이 넣어서 이게 문자라는걸 알려줘야함
+	@Enumerated(EnumType.STRING) // DB는 RoleType이라는게 없어서 해당 이넘이 스트링이라는걸 알려줘야함
+	private RoleType role; // Enum을 쓰는게 좋긴 함. 도메인을 만들때 좋음 이사람의 role은 admin, 일반유저, 매니저 뭐 이런 식으로 열거 
 	// admin일땐 모든사람들 글 삭제, 일반회원은 자기것만, 매니저면 관리자페이지에서 홈페이지 관리
 	// 도메인이라는건 프로그래밍에서 어떤 범위를 뜻함. 성별이란게 있다면 도메인은 남녀, 학년이란게 있으면 초등학생이면 1~6, 고등학생이면 1~3 이런식으로
 	

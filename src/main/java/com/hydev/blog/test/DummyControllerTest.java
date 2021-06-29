@@ -3,6 +3,8 @@ package com.hydev.blog.test;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hydev.blog.model.RoleType;
@@ -23,6 +27,33 @@ public class DummyControllerTest {
 	//의존성 주입
 	@Autowired // DummyControllerTest 이게 메모리에 뜰때 아래 userRepository도 같이 메모리에 뜸
 	private UserRepository userRepository;
+	
+	// save 함수는 id를 전달하지 않으면 insert를 해주고 id를 전달하면 해당 id에 대해 데이터가 있으면 update
+	@Transactional
+	@PutMapping("/dummy/user/{id}") // get이랑 같은데 이건 put이므로 알아서 구분
+	public User updateUser(@PathVariable int id, @RequestBody User requestUser) { // json 데이터 받을건데 requestbody 필요. json 데이터를 요청 -> Java Object로 스프링이 알아서 변경해줌(메세지 컨버터의 Jackson라이브러리)
+		System.out.println("id : "+id);
+		System.out.println("password : "+requestUser.getPassword());
+		System.out.println("email : "+requestUser.getEmail());
+		
+		User user = userRepository.findById(id).orElseThrow(()->{
+			return new IllegalArgumentException("수정 실패");
+			
+		}); // 해당 유저를 찾음
+		user.setPassword(requestUser.getPassword());
+		user.setEmail(requestUser.getEmail());
+		
+		// userRepository.save(user); 첫번째 방법 transactional 안붙인상태
+		
+		// 더티 체킹
+		return null;
+	}
+	
+	
+	
+	
+	
+	
 	
 	@GetMapping("/dummy/users")
 	public List<User> list(){

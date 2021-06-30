@@ -33,7 +33,7 @@ public class User {
 	//만약 오라클을 연결하면 시퀀스를 사용한다는거, mysql이면 auto increase 사용한다는거
 	private int id; // 시퀀스
 	
-	@Column(nullable = false,length = 30) // null 불가 길이 30
+	@Column(nullable = false,length = 30,unique=true) // null 불가 길이 30
 	private String username; // 아이디
 	
 	@Column(nullable = false,length = 100) // null 불가 길이 100

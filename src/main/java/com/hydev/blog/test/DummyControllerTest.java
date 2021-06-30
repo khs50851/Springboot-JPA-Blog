@@ -6,10 +6,12 @@ import java.util.function.Supplier;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +30,20 @@ public class DummyControllerTest {
 	@Autowired // DummyControllerTest 이게 메모리에 뜰때 아래 userRepository도 같이 메모리에 뜸
 	private UserRepository userRepository;
 	
+	@DeleteMapping("dummy/user/{id}")
+	public String delete(@PathVariable int id) {
+		try {
+			userRepository.deleteById(id);
+		}catch (EmptyResultDataAccessException e) {
+			return "삭제에 실패 하였습니다. 해당 id는 DB에 없습니다.";
+		}
+		
+		return "삭제 되었습니다. id : "+id;
+	}
+	
+	
 	// save 함수는 id를 전달하지 않으면 insert를 해주고 id를 전달하면 해당 id에 대해 데이터가 있으면 update
-	@Transactional
+	@Transactional // 컨트롤러 호출시 시작하고 메소드 종료시 commit 실행
 	@PutMapping("/dummy/user/{id}") // get이랑 같은데 이건 put이므로 알아서 구분
 	public User updateUser(@PathVariable int id, @RequestBody User requestUser) { // json 데이터 받을건데 requestbody 필요. json 데이터를 요청 -> Java Object로 스프링이 알아서 변경해줌(메세지 컨버터의 Jackson라이브러리)
 		System.out.println("id : "+id);
@@ -46,7 +60,7 @@ public class DummyControllerTest {
 		// userRepository.save(user); 첫번째 방법 transactional 안붙인상태
 		
 		// 더티 체킹
-		return null;
+		return user;
 	}
 	
 	

@@ -19,8 +19,8 @@ public class UserApiController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private HttpSession session; // 세션 객체는 스프링 컨테이너가 빈으로 등록해놔서 필요하면 DI해서 사용 가능
+//	@Autowired
+//	private HttpSession session; // 세션 객체는 스프링 컨테이너가 빈으로 등록해놔서 필요하면 DI해서 사용 가능
 	
 	@PostMapping("/api/user")
 	public ResponseDto<Integer> save(@RequestBody User user) {
@@ -45,8 +45,6 @@ public class UserApiController {
 	*/
 	
 	/* HttpSession DI로 끌어다 쓰는거
-	  */
-	 
 	@PostMapping("/api/user/login")
 	public ResponseDto<Integer> login(@RequestBody User user){
 		System.out.println("UserApiController : login 호출 됨");
@@ -56,6 +54,9 @@ public class UserApiController {
 		}
 		return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
 	}
+	 */
 	
+	// 스프링 시큐리티가 설치가 되면 어떤 페이지로 가던지 로그인페이지로 연결됨
+	// 처음 아이디 user 
 	
 }

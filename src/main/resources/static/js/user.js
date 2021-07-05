@@ -23,7 +23,7 @@ let index = {
 			// 회원 가입 수행 요청 응답의 결과가 정상이면 done 아니면 fail
 			// ajax 호출시 default가 비동기 호출
 			type:"POST",
-			url:"/blog/api/user/",
+			url:"/api/user/",
 			data:JSON.stringify(data), // 위에 변수 받은 data는 자바스크립트 오브젝트인데 자바쪽으로 던지면 자바가 이해를 못함 그래서 json으로 변경해야함
 			// 이렇게 보내는 데이터는 http body 데이터임 그래서 마임타입을 지정해야함 contentType으로 지정
 			contentType:"application/json; charset=utf-8", // body 데이터가 어떤 타입인지
@@ -33,12 +33,12 @@ let index = {
 		}).done(function(resp){
 			alert("회원 가입이 완료 되었습니다.");
 			console.log(resp);
-			location.href="/blog";
+			location.href="/";
 		}).fail(function(error){
 			alert(JSON.stringify(error));
 		}); // ajax 통신을 이용해서 3개의 데이터를 json으로 변경하여 insert 요청
 		
-	},
+	}, // save 함수 끝
 	
 	login:function(){
 		//alert('user의 save 함수 호출됨');
@@ -52,7 +52,7 @@ let index = {
 			// 회원 가입 수행 요청 응답의 결과가 정상이면 done 아니면 fail
 			// ajax 호출시 default가 비동기 호출
 			type:"POST",
-			url:"/blog/api/user/login",
+			url:"/api/user/login",
 			data:JSON.stringify(data), // 위에 변수 받은 data는 자바스크립트 오브젝트인데 자바쪽으로 던지면 자바가 이해를 못함 그래서 json으로 변경해야함
 			// 이렇게 보내는 데이터는 http body 데이터임 그래서 마임타입을 지정해야함 contentType으로 지정
 			contentType:"application/json; charset=utf-8", // body 데이터가 어떤 타입인지
@@ -62,12 +62,13 @@ let index = {
 		}).done(function(resp){
 			alert("로그인이 완료 되었습니다");
 			console.log(resp);
-			location.href="/blog";
+			location.href="/";
 		}).fail(function(error){
 			alert(JSON.stringify(error));
 		}); // ajax 통신을 이용해서 3개의 데이터를 json으로 변경하여 insert 요청
 		
-	}
+	} // login 함수 끝
+	
 }
 
 index.init();

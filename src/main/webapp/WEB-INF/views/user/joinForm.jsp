@@ -22,6 +22,6 @@
 	
 </div>
 <!-- /라고 하면 바로 static 폴더를 찾아감 -->
-<script src="/blog/js/user.js">
+<script src="/js/user.js">
 </script>
 <%@ include file="../layout/footer.jsp"%>

@@ -29,7 +29,7 @@ spring:
     password: 1234
     
   jpa:
-    open-in-view: true
+    open-in-view: true # 이때부터 LAZY로딩이 가능 이유는 영속성을 프레젠테이션 계층까지 가져가기 때문, 트랜잭션은 Service계층에서 종료
     hibernate:
       ddl-auto: update # 이걸 update라고도 할 수도 있고 none 이라고도 할 수 있음 create는 테이블을 새로 만든다는거(플젝을 실행할때마다) 최초에만 create로 하고 나중엔 update로 바꿔야함 안그러면 실행될때마다 create돼서 데이터 다날라감
       naming:

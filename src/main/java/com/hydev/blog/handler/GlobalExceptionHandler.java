@@ -11,7 +11,7 @@ import com.hydev.blog.dto.ResponseDto;
 @RestController
 public class GlobalExceptionHandler {
 	
-	@ExceptionHandler(value=IllegalArgumentException.class) // IllegalArg~ 에러 발생하면 여기로 스프링이 전달해줌
+	@ExceptionHandler(value=Exception.class) // IllegalArg~ 에러 발생하면 여기로 스프링이 전달해줌
 	public ResponseDto<String> handleArgumentException(Exception e) {
 		return new ResponseDto<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(),e.getMessage());
 	}

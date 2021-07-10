@@ -45,6 +45,16 @@ public class BoardService {
 	@Transactional
 	public void 글삭제하기(int id) {
 		boardRepository.deleteById(id);
-			
+	}
+	
+	@Transactional
+	public void 글수정하기(int id,Board requestBoard) {
+		Board board = boardRepository.findById(id)
+				.orElseThrow(()->{
+					return new IllegalArgumentException("글수정 실패 : 아이디를 찾을 수 없습니다. id : "+id);
+				});
+		board.setTitle(requestBoard.getTitle());
+		board.setContent(requestBoard.getContent());
+		// 해당 함수 종료시 트랜잭션이 Service가 종료될때 트랜잭션이 종료되면서 더티체킹이 일어나면서 자동 업데이트
 	}
 }

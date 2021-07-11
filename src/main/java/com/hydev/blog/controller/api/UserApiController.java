@@ -4,11 +4,19 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hydev.blog.config.auth.PrincipalDetail;
 import com.hydev.blog.dto.ResponseDto;
 import com.hydev.blog.model.RoleType;
 import com.hydev.blog.model.User;
@@ -20,6 +28,8 @@ public class UserApiController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 //	@Autowired
 //	private HttpSession session; // 세션 객체는 스프링 컨테이너가 빈으로 등록해놔서 필요하면 DI해서 사용 가능
 	
@@ -32,6 +42,33 @@ public class UserApiController {
 		return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
 	}
 	
+	/* 20210711 연습 내용
+	@PutMapping("/user")
+	public ResponseDto<Integer> update(@RequestBody User user,@AuthenticationPrincipal PrincipalDetail principal,HttpSession session){
+		System.out.println("email : "+user.getEmail());
+		userService.회원수정(user);
+		
+	
+		// 여기서 세션 변경할건데 authentication 객체를 직접 만들거임
+		Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null,principal.getAuthorities()); //authen 토큰 생성
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		securityContext.setAuthentication(authentication); // 이렇게 강제로 세션값 바꿈
+		session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext); // 세션 저장
+		
+		
+		return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
+	}
+	*/
+	
+	@PutMapping("/user")
+	public ResponseDto<Integer> update(@RequestBody User user,@AuthenticationPrincipal PrincipalDetail principal,HttpSession session){
+		System.out.println("email : "+user.getEmail());
+		userService.회원수정(user);
+		// 세션 등록
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
+	}
 	
 	// 전통적인 로그인 방식
 	/* HttpSession 함수 매개변수로 받아서 사용하는거

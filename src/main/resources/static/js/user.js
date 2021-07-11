@@ -3,7 +3,9 @@ let index = {
 		$("#btn-save").on("click",()=>{ // 이건 화살표 함수인데 function(){} 이렇게 안하는 이유는 this를 바인딩 하기 위해 function으로 사용하면 this값이 달라질 수 있음 펑션 사용할거면 let _this = this; 이렇게 먼저 바인딩 해놓고 아래에 _this.save() 이렇게 사용
 			this.save();
 		}); // 첫번쨰 파라미터는 어떤 이벤트가 될지, 두번째 파라미터는 무엇을 할지
-		
+		$("#btn-update").on("click",()=>{ 
+			this.update();
+		});
 		
 		//$("#btn-login").on("click",()=>{ // 이건 화살표 함수인데 function(){} 이렇게 안하는 이유는 this를 바인딩 하기 위해 function으로 사용하면 this값이 달라질 수 있음 펑션 사용할거면 let _this = this; 이렇게 먼저 바인딩 해놓고 아래에 _this.save() 이렇게 사용
 		//	this.login();
@@ -36,7 +38,31 @@ let index = {
 			alert(JSON.stringify(error));
 		}); // ajax 통신을 이용해서 3개의 데이터를 json으로 변경하여 insert 요청
 		
-	} // save 함수 끝
+	}, // save 함수 끝
+	
+	update:function(){ // update 함수 시작
+		//alert('user의 save 함수 호출됨');
+		let data = {
+			id:$("#id").val(),
+			username:$("#username").val(),
+			password:$("#password").val(),
+			email:$("#email").val()
+		}
+		$.ajax({
+			type:"PUT",
+			url:"/user",
+			data:JSON.stringify(data), 
+			contentType:"application/json; charset=utf-8", 
+			dataType:"json" 
+		}).done(function(resp){
+			console.log(resp);
+			alert("회원 수정이 완료 되었습니다.");
+			location.href="/";
+		}).fail(function(error){
+			alert(JSON.stringify(error));
+		}); // ajax 통신을 이용해서 3개의 데이터를 json으로 변경하여 insert 요청
+		
+	} // 업데이트 함수 끝
 	
 	//login:function(){
 		//alert('user의 save 함수 호출됨');

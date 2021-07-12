@@ -43,3 +43,7 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+      
+hydev:
+  key: hy1234
+      

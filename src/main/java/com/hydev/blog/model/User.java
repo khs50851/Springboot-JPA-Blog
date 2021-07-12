@@ -33,7 +33,7 @@ public class User {
 	//만약 오라클을 연결하면 시퀀스를 사용한다는거, mysql이면 auto increase 사용한다는거
 	private int id; // 시퀀스
 	
-	@Column(nullable = false,length = 30,unique=true) // null 불가 길이 30
+	@Column(nullable = false,length = 100,unique=true) // null 불가 길이 100
 	private String username; // 아이디
 	
 	@Column(nullable = false,length = 100) // null 불가 길이 100
@@ -48,6 +48,7 @@ public class User {
 	// admin일땐 모든사람들 글 삭제, 일반회원은 자기것만, 매니저면 관리자페이지에서 홈페이지 관리
 	// 도메인이라는건 프로그래밍에서 어떤 범위를 뜻함. 성별이란게 있다면 도메인은 남녀, 학년이란게 있으면 초등학생이면 1~6, 고등학생이면 1~3 이런식으로
 	
+	private String oauth; // kakao, google
 	
 	@CreationTimestamp // 시간이 자동으로 현재시간으로 입력됨
 	private Timestamp createDate; // 가입 시간

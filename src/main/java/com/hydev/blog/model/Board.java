@@ -13,9 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,7 +57,9 @@ public class Board {
 	
 	// 이건 JoinColmn 필요없음, 실제 mysql 테이블에 댓글 외래키가 필요없음
 	// 만약 이게 만들어진다면 게시글 한 레코드에 댓글은 많이 달려있을 수 있는데 replyid에 1,2,3,4 이런식으로 데이터가 들어갈 순 없음
-	private List<Reply> reply; // 한 게시글의 댓글은 여러개이므로 list로 들어가야함
+	@JsonIgnoreProperties({"board"}) // 이렇게 하면 replys 안에서 또 호출 할때 board는 호출을 안함 @JsonIgnoreProperties({"board","user"}) 이렇게하면 user도 안들고옴 
+	@OrderBy("id desc")
+	private List<Reply> replys; // 한 게시글의 댓글은 여러개이므로 list로 들어가야함
 	
 	@CreationTimestamp
 	private Timestamp createDate; // 현재 시간

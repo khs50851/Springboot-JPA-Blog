@@ -10,10 +10,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hydev.blog.dto.ReplySaveRequestDto;
 import com.hydev.blog.model.Board;
+import com.hydev.blog.model.Reply;
 import com.hydev.blog.model.RoleType;
 import com.hydev.blog.model.User;
 import com.hydev.blog.repository.BoardRepository;
+import com.hydev.blog.repository.ReplyRepository;
 import com.hydev.blog.repository.UserRepository;
 
 @Service
@@ -21,6 +24,12 @@ public class BoardService {
 	
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ReplyRepository replyRepository;
 	
 	@Transactional
 	public void 글쓰기(Board board,User user) { // title,content 받음
@@ -57,4 +66,27 @@ public class BoardService {
 		board.setContent(requestBoard.getContent());
 		// 해당 함수 종료시 트랜잭션이 Service가 종료될때 트랜잭션이 종료되면서 더티체킹이 일어나면서 자동 업데이트
 	}
+	
+	@Transactional
+	public void 댓글쓰기(ReplySaveRequestDto requestReply) {
+		
+		User user = userRepository.findById(requestReply.getUserid())
+				.orElseThrow(()->{
+					return new IllegalArgumentException("댓글 쓰기 실패 : 유저 id를 찾을 수 없습니다.");
+				}); // 영속화 완료
+		
+		Board board = boardRepository.findById(requestReply.getBoardid())
+				.orElseThrow(()->{
+					return new IllegalArgumentException("댓글 쓰기 실패 : 게시글 id를 찾을 수 없습니다.");
+				}); // 영속화 완료
+		
+		Reply reply = Reply.builder()
+				.user(user)
+				.board(board)
+				.content(requestReply.getContent())
+				.build();
+		replyRepository.save(reply);
+	}
+	
+	
 }

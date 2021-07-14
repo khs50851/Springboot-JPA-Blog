@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hydev.blog.config.auth.PrincipalDetail;
+import com.hydev.blog.dto.ReplySaveRequestDto;
 import com.hydev.blog.dto.ResponseDto;
 import com.hydev.blog.model.Board;
+import com.hydev.blog.model.Reply;
 import com.hydev.blog.service.BoardService;
 
 @RestController
@@ -37,6 +39,16 @@ public class BoardApiController {
 	@PutMapping("/api/board/{id}")
 	public ResponseDto<Integer> update(@PathVariable int id,@RequestBody Board board){
 		boardService.글수정하기(id,board);
+		return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
+	}
+	
+	// 원래는 데이터를 받을 때 컨트롤러에서 dto를 만들어 받는게 조음
+	
+	@PostMapping("/api/board/{boardid}/reply")
+	public ResponseDto<Integer> replySave(@RequestBody ReplySaveRequestDto reply) {
+		
+		
+		boardService.댓글쓰기(reply);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
 	}
 }

@@ -31,9 +31,15 @@ let index = {
 			contentType:"application/json; charset=utf-8", // body 데이터가 어떤 타입인지
 			dataType:"json" // 요청을 서버로 해서 응답이 왔을 때 기본적으로 버퍼로 오기때문에 모든 것이 String(문자열)임 근데 생긴게 json(json으로 지정하면)이라면 -> javascript오브젝트로 변경해줌
 		}).done(function(resp){
-			alert("회원 가입이 완료 되었습니다.");
 			console.log(resp);
-			location.href="/";
+			if(resp.status === 500){
+				alert("회원 가입 실패.");
+			}else{
+				alert("회원 가입이 완료 되었습니다.");
+			}
+			
+			
+			//location.href="/";
 		}).fail(function(error){
 			alert(JSON.stringify(error));
 		}); // ajax 통신을 이용해서 3개의 데이터를 json으로 변경하여 insert 요청

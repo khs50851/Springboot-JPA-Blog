@@ -70,6 +70,7 @@ public class BoardService {
 	@Transactional
 	public void 댓글쓰기(ReplySaveRequestDto requestReply) {
 		
+		/* 20210713 첫번째 방법
 		User user = userRepository.findById(requestReply.getUserid())
 				.orElseThrow(()->{
 					return new IllegalArgumentException("댓글 쓰기 실패 : 유저 id를 찾을 수 없습니다.");
@@ -85,8 +86,15 @@ public class BoardService {
 				.board(board)
 				.content(requestReply.getContent())
 				.build();
-		replyRepository.save(reply);
+				
+		*/		
+		int result = replyRepository.mSave(requestReply.getUserid(),requestReply.getBoardid(),requestReply.getContent());
+		System.out.println("결과 : "+result);
 	}
 	
+	@Transactional
+	public void 댓글삭제(int replyid) {
+		replyRepository.deleteById(replyid);
+	}
 	
 }

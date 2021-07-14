@@ -3,6 +3,7 @@ package com.hydev.blog.model;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,7 +52,7 @@ public class Board {
 	@JoinColumn(name="userid")
 	private User user; // DB는 오브젝트를 저장할 수 없음. orm에선 외래키로 찾는게 아니라 user 오브젝트를 바로 넣으면 됨 이게 실제로 foreign key가 되는거
 	
-	@OneToMany(mappedBy = "board",fetch = FetchType.EAGER) //Reply 클래스에 있는 board 객체 넣음 (mappedBy가 적혀 있으면 연관관계의 주인이 아니다(한마디로 난 FK가 아님) DB에 컬럼을 만들지 마세요.) 여기선 Reply 테이블의 board가 FK임 
+	@OneToMany(mappedBy = "board",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE) //Reply 클래스에 있는 board 객체 넣음 (mappedBy가 적혀 있으면 연관관계의 주인이 아니다(한마디로 난 FK가 아님) DB에 컬럼을 만들지 마세요.) 여기선 Reply 테이블의 board가 FK임 // cascade.remove 걸어서 게시글 삭제시 그와 관련된 댓글 다 삭제
 	// 이건 그냥 board를 셀렉트할때 조인문을 통해 값을 얻기 위함임 OneToMany 기본은 FetchType.LAZY이지만 여기선 바로 댓글을 가져와야하므로 EAGER로 바꿈
 	// mappedBy 뒤에 나오는건 필드 이름임
 	
